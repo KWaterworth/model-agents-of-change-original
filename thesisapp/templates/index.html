@@ -1,0 +1,111 @@
+{% load static %}  <!-- Load staticfiles tag -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <title>Thesis App</title>
+	<link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		function checkField() {
+			if (document.getElementById('searchfield').value.trim() != '') {
+				searchButton.classList.remove('unsearchable');
+				searchButton.classList.add('searchable');
+			}
+		}
+	</script>
+</head>
+<body onload="checkField()">
+<h1 style="color:white;text-align:center;">Model-Agents of Change: AI Research Paper Semantic Search</h1>
+
+<form id="searchForm" action="{% url 'search' %}" method="GET" class="searchwrapper">
+<input id="searchfield" autocomplete="off" type="text" placeholder="Please enter some search terms" />
+<input id="searchbutton" class="unsearchable" type="button" value="Search" />
+</form>
+<div style="height:2em;"></div>
+
+<div id="response"></div>
+
+<script>
+	if (document.getElementById('searchfield').value.trim() != '') {
+		searchButton = document.getElementById("searchbutton");
+		searchButton.classList.remove('unsearchable');
+		searchButton.classList.add('searchable');
+	}
+	// Add event listener to detect changes in the search field
+	document.getElementById('searchfield').addEventListener('input', function() {
+		// Get the value of the search field
+		var searchFieldValue = this.value.trim();
+		
+		// Get the search button element
+		var searchButton = document.getElementById('searchbutton');
+		
+		// If the search field has text, add the 'green' class to the search button
+		// Otherwise, remove the 'green' class
+		if (searchFieldValue) {
+			searchButton.classList.remove('unsearchable');
+			searchButton.classList.add('searchable');
+		} else {
+			searchButton.classList.remove('searchable');
+			searchButton.classList.add('unsearchable');
+		}
+	});
+	var form = document.getElementById('searchForm');
+	form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+		handleSearch();
+	});
+	
+	$(document).ready(function() {
+		$('#searchbutton').click(function() {
+			handleSearch();
+		});
+	});
+	
+	function handleSearch() {
+		var searchTerm = $('#searchfield').val().trim();
+		if (searchTerm) {
+			var response_window = document.getElementById('response');
+			response_window.innerHTML = "<p>Loading...<p>";
+			// Send search term to Django view using AJAX
+			$.ajax({
+				url: '/search/',
+				type: 'GET',
+				data: {
+					'question': searchTerm
+				},
+				success: function(response) {
+					console.log(response);
+					// Set content to nothing to remove "Loading" from the window
+					response_window.innerHTML = "<p style='margin:auto;text-align:center;color:white;font-size:1.5em;width:min(1200px,90vw);'>Showing results for: \"" + response.question + "\"</p><br><br>";
+					results = response.results;
+					for (var i = 0; i < results.length; i++) {
+						item = results[i];
+						var card_item = document.createElement("div");
+						card_item.className = "resultcard";
+						var title = document.createElement("h1");
+						title.appendChild(document.createTextNode(item.tou["Title"]));
+						card_item.appendChild(title);
+						var abst = document.createElement("p");
+						abst.appendChild(document.createTextNode(item.tou["Abstract"]));
+						card_item.appendChild(abst);
+						var maxcos = document.createElement("p");
+						maxcos.appendChild(document.createTextNode("The most relevant part of the paper was determined to be the " + item["max_key"].toLowerCase()));
+						maxcos.style.fontWeight = "700";
+						card_item.appendChild(maxcos);
+						response_window.appendChild(card_item);
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error(error);
+				}
+			});
+		}
+	}
+</script>
+
+
+</body>
+</html>

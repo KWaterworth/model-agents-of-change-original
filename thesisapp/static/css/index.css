@@ -1,0 +1,81 @@
+@font-face {
+    font-family: 'WorkSans';
+    src: url('../fonts/WorkSans-VariableFont_wght.ttf') format('ttf');
+}
+
+body {
+	background-color:black;
+	font-family:"WorkSans", sans-serif;
+	color:white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color:white;
+}
+
+.searchwrapper {
+	width:min(1200px, 90vw);
+	border-radius:10px;
+	overflow:hidden;
+	display:flex;
+	margin:auto;
+}
+
+.unsearchable {
+	background-color:#333333;
+	color:black;
+}
+
+.unsearchable:hover {
+	background-color:#333333;
+	color:black;
+}
+
+.searchable {
+	background-color:#2abd51;
+	color:white;
+}
+
+.searchable:hover {
+	cursor:pointer;
+	background-color:#64d63a;
+	color:white;
+}
+
+.searchable:active {
+	scale:0.97;
+}
+
+#searchbutton {
+	padding:0.5em;
+	width:120px;
+	border-radius:0px 10px 10px 0px;
+	border:none;
+	font-size:1.5em;
+}
+
+#searchfield {
+	padding:0.5em;
+	width:90vw;
+	font-size:1.5em;
+	color:black;
+	border-radius:10px 0px 0px 10px;
+	display:block;
+	margin:auto;
+	border:none;
+}
+
+.resultcard {
+    width: min(1200px, 90vw);
+    background-color: white;
+    color: black;
+    padding: 2em;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin: auto;
+    margin-bottom: 3em;
+}
+
+.resultcard h1 {
+    color: black;
+}

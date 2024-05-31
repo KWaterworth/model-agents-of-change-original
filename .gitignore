@@ -1,0 +1,6 @@
+# Ignore model files
+thesisapp/large_models/*
+# Ignore backup files
+*.bak
+# Ignore the GPT finetuning files
+thesisapp/test_files/gpt2-research-paper-template/*
